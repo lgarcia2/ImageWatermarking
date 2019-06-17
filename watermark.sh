@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 if [[ "$#" != 2 ]]; then
-	echo "TODO"
+	echo "Please provide two arguments: A directory containing only the image files you wish to watermark and the image to use as a watermark."
 	exit 1
 fi
 
