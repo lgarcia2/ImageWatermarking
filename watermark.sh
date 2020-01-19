@@ -1,14 +1,21 @@
 #!/bin/bash
 set -e
 if [[ "$#" != 2 ]]; then
-	echo "Please provide two arguments: A directory containing only the image files you wish to watermark and the image to use as a watermark."
+	echo "This is a script for watermarking images:"
+	echo "To use this please provide as arguments:"
+	echo "    1. The path to a directory containing only the image files you wish to watermark"
+	echo "    2. The path to the image to use as a watermark."
+	echo "USAGE:"
+	echo "./watermark.sh {DirectoryOfImages} {PathToWatermarkFile}"
+	echo "EXAMPLE"
+	echo "./watermark.sh ../../images/sourceImages ../../images/watermark.png"
 	exit 1
 fi
 
 IMAGEDIR=$1
 WATERMARK=$2
 WATERMARKSCALE=(1/4)
-OUTPUTRELDIR="Watermarked"
+OUTPUTRELDIR="watermarked"
 
 FFPROBEOUT=$(./ffmpeg/ffprobe.exe -i "$WATERMARK" -v error -hide_banner -select_streams v:0 -show_entries stream=width,height -of default=nw=1)
 
@@ -27,8 +34,8 @@ do
 	IMAGEWIDTH=$(echo "$FFPROBEOUT" | grep width | cut -d '=' -f 2)
 	IMAGEHEIGHT=$(echo "$FFPROBEOUT" | grep height | cut -d '=' -f 2)
 	
-	SCALEWIDTH=$(( ($IMAGEWIDTH/$IMAGEWIDTH)*$WATERMARKSCALE ))
-	SCALEHEIGHT=$(( ($IMAGEHEIGHT/$IMAGEHEIGHT)*$WATERMARKSCALE ))
+	SCALEWIDTH=$(( ($IMAGEWIDTH/$IMAGEHEIGHT)*$WATERMARKWIDTH*$WATERMARKSCALE ))
+	SCALEHEIGHT=$(( ($IMAGEWIDTH/$IMAGEHEIGHT)*$WATERMARKHEIGHT*$WATERMARKSCALE ))
 	
 	OUTPUT=$IMAGEDIR\\$OUTPUTRELDIR\\$IMAGE
 	
